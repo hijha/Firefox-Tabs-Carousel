@@ -18,9 +18,15 @@
     "scripts": ["background.js"]
   },
 
+  "content_scripts": [
+    {
+      "matches": ["*://*/"]
+    }
+  ],
+
   "applications": {
     "gecko": {
-       "id": "com.jay.tab-carousel"
+       "id": "com.jay@tab-carousel"
     }
   }
 

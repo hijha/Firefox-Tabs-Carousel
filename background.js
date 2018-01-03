@@ -49,7 +49,7 @@ function switchTab() {
         console.log("Stopping Tab Rotation");
         return;
       }
-    }, 2000);
+    }, 5000);
   });
 }
 
