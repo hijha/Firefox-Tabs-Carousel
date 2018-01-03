@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "tab-switch-action",
+  "name": "Tab Carousel",
   "version": "1.0",
-  "description": "Show a page action after a period of inactivity. Show cat gifs when the page action is clicked.",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/chill-out",
+  "description": "Rotate all the open tabs at set interval.",
+  "homepage_url": "https://github.com/hijha/Firefox-Tabs-Carousel",
   
   "permissions": [
     "tabs"
@@ -20,7 +20,7 @@
 
   "applications": {
     "gecko": {
-       "id": "himanshujha19@gmail.com"
+       "id": "com.jay.tab-carousel"
     }
   }
 
