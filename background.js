@@ -1,7 +1,57 @@
-var currentTabIndex = 0;
 var switchingTabs = false;
+var newTabIndex = -1;
 
-getCurrentTabIndex();
+installPlugin();
+
+function installPlugin() {
+  browser.tabs.query({currentWindow: true, active: true})
+  .then((tabs) => {
+    browser.pageAction.show(tabs[0].id);
+  });
+}
+
+function switchTab() {
+  console.log("Starting Tab Rotation");
+
+  browser.tabs.query({currentWindow: true, active: true})
+  .then((tabs) => {
+    let currentTabId = tabs[0].id;
+    browser.pageAction.show(currentTabId);
+    console.log(`Current Tab Id: ${currentTabId}`);
+    return currentTabId;
+  }).then((currentTabId) => {
+    return browser.tabs.get(currentTabId);
+  }).then((tab) => {
+    console.log(`Current tab Index: ${tab.index}`);
+    return tab.index + 1;
+  }).then((nextTabIndex) => {
+    newTabIndex = nextTabIndex;
+    return browser.tabs.query({currentWindow: true})
+  }).then((tabs) => {
+    let index = -1;
+    if (newTabIndex >= tabs.length) {
+      newTabIndex = 0;
+    }
+    console.log(`New tab Index: ${newTabIndex}`);
+    console.log(`New tab ID: ${tabs[newTabIndex].id}`);
+    return tabs[newTabIndex].id;
+  }).then((newTabId) => {
+    console.log('Switching Tab');
+    return browser.tabs.update(newTabId, {
+      active: true
+    })
+  }).then((tab) => {
+    console.log(`Switched to ${tab.id}`)
+    setTimeout(function() {
+      if (switchingTabs) {
+        switchTab();
+      } else {
+        console.log("Stopping Tab Rotation");
+        return;
+      }
+    }, 2000);
+  });
+}
 
 browser.pageAction.onClicked.addListener(() => {
   console.log("enable/disable add on")
@@ -11,36 +61,3 @@ browser.pageAction.onClicked.addListener(() => {
     switchTab();
   }
 });
-
-function switchTab() {
-  console.log("switching tab");
-  getCurrentTabIndex();
-  browser.tabs.query({currentWindow: true})
-  .then((tabs) => {
-    if (currentTabIndex == tabs[0].id) {
-      currentTabIndex = tabs[1].id;
-    } else {
-      currentTabIndex = tabs[0].id;
-    }
-    browser.tabs.update(currentTabIndex, {
-      active: true
-    })
-    setTimeout(function() {
-      if (switchingTabs) {
-        switchTab();
-      } else {
-        console.log("exiting function");
-        return;
-      }
-    }, 2000);
-  });
-}
-
-function getCurrentTabIndex() {
-  browser.tabs.query({currentWindow: true, active: true})
-  .then((tabs) => {
-    browser.pageAction.show(tabs[0].id)
-    currentTabIndex = tabs[0].id;
-    console.log(`current Tab Index ${currentTabIndex}`)
-  })
-}
