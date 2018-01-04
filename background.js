@@ -42,6 +42,19 @@ function switchTab() {
     })
   }).then((tab) => {
     console.log(`Switched to ${tab.id}`)
+    return browser.windows.get(tab.windowId);
+  }).then((window) => {
+    console.log(`Window ID is ${window.id}`);
+    if (switchingTabs) {
+      return browser.windows.update(window.id, {
+        state: 'fullscreen'
+      })
+    } else {
+      return browser.windows.update(window.id, {
+        state: 'maximized'
+      })
+    }
+  }).then((windowInfo) => {
     setTimeout(function() {
       if (switchingTabs) {
         switchTab();
