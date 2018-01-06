@@ -6,7 +6,8 @@
   "homepage_url": "https://github.com/hijha/Firefox-Tabs-Carousel",
   
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ],
 
   "page_action": {
@@ -23,6 +24,10 @@
       "matches": ["*://*/"]
     }
   ],
+
+  "options_ui": {
+    "page": "options.html"
+  },
 
   "applications": {
     "gecko": {

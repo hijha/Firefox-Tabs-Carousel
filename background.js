@@ -1,5 +1,6 @@
 var switchingTabs = false;
 var newTabIndex = -1;
+var waitDuration = 0;
 
 installPlugin();
 
@@ -13,7 +14,12 @@ function installPlugin() {
 function switchTab() {
   console.log("Starting Tab Rotation");
 
-  browser.tabs.query({currentWindow: true, active: true})
+  browser.storage.local.get("duration")
+  .then((item) => {
+    waitDuration = item.duration*1000;
+    console.log(`Wait duration: ${waitDuration}`);
+    return browser.tabs.query({currentWindow: true, active: true});
+  })
   .then((tabs) => {
     let currentTabId = tabs[0].id;
     browser.pageAction.show(currentTabId);
@@ -49,7 +55,7 @@ function switchTab() {
         console.log("Stopping Tab Rotation");
         return;
       }
-    }, 5000);
+    }, waitDuration);
   });
 }
 
