@@ -7,7 +7,7 @@ function saveOptions(e) {
 
 function restoreOptions() {
   function setCurrentChoice(result) {
-    document.querySelector("#duration").value = result.color || 3;
+    document.querySelector("#duration").value = result.duration || 3;
   }
 
   function onError(error) {
